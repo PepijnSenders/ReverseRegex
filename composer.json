@@ -1,8 +1,8 @@
 {
-    "name": "icomefromthenet/reverse-regex",
+    "name": "pep/reverse-regex",
     "description": "Convert Regular Expressions into text, for testing",
     "keywords": ["regex","testing","test data","generator"],
-    "homepage": "http://github.com/icomefromthenet/ReverseRegex",
+    "homepage": "https://github.com/PepijnSenders/ReverseRegex",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -10,6 +10,11 @@
             "name": "Lewis Dyer",
             "email": "getintouch@icomefromthenet.com",
             "homepage": "http://www.icomefromthenet.com"
+        },
+        {
+            "name": "Pepijn Senders",
+            "email": "pepijn@bekokstooft.nl",
+            "homepage": "http://www.bekokstooft.nl"
         }
     ],
     "require-dev": {
