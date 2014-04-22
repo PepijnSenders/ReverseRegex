@@ -16,13 +16,14 @@
        "phpunit/phpunit": "3.7.*"
     },
     "require": {
-        "doctrine/common"      : "2.3.*",
-        "patchwork/utf8"       : "1.0.*"
+        "doctrine/common"      : "*",
+        "patchwork/utf8"       : "*"
     },
     "autoload": {
         "psr-0": {
             "ReverseRegex": "src/",
             "PHPStats"    : "src/"
         }
-    }
+    },
+    "minimum-stability": "stable"
 }
