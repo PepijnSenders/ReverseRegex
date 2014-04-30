@@ -3,3 +3,4 @@ vendor
 composer.lock
 *.komodoproject
 manifest
+.DS_Store

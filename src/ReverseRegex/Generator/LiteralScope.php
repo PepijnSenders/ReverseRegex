@@ -2,7 +2,7 @@
 namespace ReverseRegex\Generator;
 
 use ReverseRegex\Generator\Scope;
-use PHPStats\Generator\GeneratorInterface;
+use ReverseRegex\Random\GeneratorInterface;
 use ReverseRegex\ArrayCollection;
 use ReverseRegex\Exception as GeneratorException;
 
@@ -19,7 +19,7 @@ class LiteralScope extends Scope
       */
     protected $literals;
 
-    
+
     /**
       *  Class Constructor
       *
@@ -30,7 +30,7 @@ class LiteralScope extends Scope
     public function __construct($label = 'label')
     {
         parent::__construct($label);
-        
+
         $this->literals = new ArrayCollection();
     }
 
@@ -56,7 +56,7 @@ class LiteralScope extends Scope
     {
         $this->literals->set($hex,$literal);
     }
-    
+
     /**
       *  Return the literal ArrayCollection
       *
@@ -67,8 +67,8 @@ class LiteralScope extends Scope
     {
         return $this->literals;
     }
-    
-    
+
+
     /**
       *  Generate a text string appending to the result argument
       *
@@ -81,23 +81,23 @@ class LiteralScope extends Scope
         if($this->literals->count() === 0) {
             throw new GeneratorException('There are no literals to choose from');
         }
-        
+
        $repeat_x = $this->calculateRepeatQuota($generator);
-        
+
         while($repeat_x > 0) {
              $randomIndex = 0;
-             
+
              if($this->literals->count() > 1) {
-                $randomIndex = \round($generator->generate(1,($this->literals->count())));        
+                $randomIndex = \round($generator->generate(1,($this->literals->count())));
              }
-             
+
              $result     .= $this->literals->getAt($randomIndex);
-             
+
              --$repeat_x;
         }
-        
+
         return $result;
-        
+
     }
 
 }

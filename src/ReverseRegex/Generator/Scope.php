@@ -1,7 +1,7 @@
 <?php
 namespace ReverseRegex\Generator;
 
-use PHPStats\Generator\GeneratorInterface;
+use ReverseRegex\Random\GeneratorInterface;
 use ReverseRegex\Exception as GeneratorException;
 
 /**
@@ -12,16 +12,16 @@ use ReverseRegex\Exception as GeneratorException;
   */
 class Scope extends Node implements ContextInterface, RepeatInterface, AlternateInterface
 {
-    
+
     const REPEAT_MIN_INDEX  = 'repeat_min';
-    
-    const REPEAT_MAX_INDEX  = 'repeat_max'; 
-    
+
+    const REPEAT_MAX_INDEX  = 'repeat_max';
+
     const USE_ALTERNATING_INDEX = 'use_alternating';
-    
-    
+
+
     /**
-      *  Class Constructor 
+      *  Class Constructor
       */
     public function __construct($label = 'node')
     {
@@ -32,12 +32,12 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
         $this->setMinOccurances(1);
         $this->setMaxOccurances(1);
     }
-    
-    
+
+
     //  ----------------------------------------------------------------------------
     # Conext Interface
-    
-    
+
+
     /**
       *  Generate a text string appending to result arguments
       *
@@ -50,33 +50,33 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
         if($this->count() === 0) {
             throw new GeneratorException('No child scopes to call must be atleast 1');
         }
-        
+
         $repeat_x = $this->calculateRepeatQuota($generator);
-        
-        # rewind the current item 
+
+        # rewind the current item
         $this->rewind();
         while($repeat_x > 0) {
-            
+
             if($this->usingAlternatingStrategy()) {
-                $randomIndex = \round($generator->generate(1,($this->count())));                
-                $this->get($randomIndex)->generate($result,$generator);    
-                                
+                $randomIndex = \round($generator->generate(1,($this->count())));
+                $this->get($randomIndex)->generate($result,$generator);
+
             } else {
-                
+
                 foreach($this as $current) {
-                    $current->generate($result,$generator);    
-                }    
-                
+                    $current->generate($result,$generator);
+                }
+
             }
-            
+
             $repeat_x = $repeat_x -1;
         }
-        
-        
+
+
         return $result;
     }
-    
-    
+
+
     /**
       *  Fetch a node given an `one-based index`
       *
@@ -88,32 +88,32 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
         if($index > $this->count() || $index <= 0) {
             return null;
         }
-        
+
         $this->rewind();
         while(($index - 1) > 0) {
             $this->next();
             $index = $index - 1;
         }
-        
+
         return $this->current();
-        
+
     }
-    
-    
+
+
     //  ----------------------------------------------------------------------------
     # Repeat Interface
-    
+
      /**
       * Fetches the max occurances
       *
       * @access public
       * @return integer the maximum number of occurances
-      */    
+      */
     public function getMaxOccurances()
     {
         return $this[self::REPEAT_MAX_INDEX];
     }
-    
+
      /**
       *  Sets the maximum re-occurances
       *
@@ -125,11 +125,11 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
         if(is_integer($num) === false){
             throw new GeneratorException('Number must be an integer');
         }
-        
+
         $this[self::REPEAT_MAX_INDEX] = $num;
-        
+
     }
-    
+
     /**
       *  Fetch the Minimum Occurances
       *
@@ -140,7 +140,7 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
     {
         return $this[self::REPEAT_MIN_INDEX];
     }
-    
+
     /**
       *  Sets the Minimum number of re-occurances
       *
@@ -152,11 +152,11 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
         if(is_integer($num) === false){
             throw new GeneratorException('Number must be an integer');
         }
-        
+
         $this[self::REPEAT_MIN_INDEX] = $num;
     }
-    
-    
+
+
      /**
       *  Return the occurance range
       *
@@ -167,8 +167,8 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
     {
         return (integer)($this->getMaxOccurances() - $this->getMinOccurances());
     }
-    
-    
+
+
     /**
       *  Calculate a random numer of repeats given the current min-max range
       *
@@ -179,29 +179,29 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
     public function calculateRepeatQuota(GeneratorInterface $generator)
     {
         $repeat_x = $this->getMinOccurances();
-        
+
         if($this->getOccuranceRange() > 0) {
-            $repeat_x = (integer) \round($generator->generate($this->getMinOccurances(),$this->getMaxOccurances()));        
-        } 
-        
+            $repeat_x = (integer) \round($generator->generate($this->getMinOccurances(),$this->getMaxOccurances()));
+        }
+
         return $repeat_x;
     }
-    
+
     //------------------------------------------------------------------
     # AlternateInterface
-    
-    
+
+
     /**
       *  Tell the scope to select childing use alternating strategy
       *
       *  @access public
       *  @return void
-      */    
+      */
     public function useAlternatingStrategy()
     {
         $this[self::USE_ALTERNATING_INDEX] = true;
     }
-    
+
     /**
       *  Return true if setting been activated
       *
@@ -212,6 +212,6 @@ class Scope extends Node implements ContextInterface, RepeatInterface, Alternate
     {
         return (boolean) $this[self::USE_ALTERNATING_INDEX];
     }
-    
+
 }
 /* End of File */
